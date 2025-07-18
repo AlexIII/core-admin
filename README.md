@@ -1,3 +1,12 @@
+**This is a fork. [Original project repo.](https://github.com/edandersen/core-admin)**
+
+## Fork changelog
+
+### 3.0.1
+
+- .NET 9 support
+- Auto-initialize Key GUID fields in Entity Create form to a new GUID
+
 # Core Admin Panel for ASP.NET Core & .NET 8
 
 [![.NET 8](https://github.com/edandersen/core-admin/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/edandersen/core-admin/actions/workflows/dotnet-core.yml)
