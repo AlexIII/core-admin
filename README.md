@@ -1,11 +1,17 @@
 **This is a fork. [Original project repo.](https://github.com/edandersen/core-admin)**
 
+## Install with nuget
+
+`dotnet add package AlexIII.CoreAdmin`
+
 ## Fork changelog
 
 ### 3.0.1
 
 - .NET 9 support
 - Auto-initialize Key GUID fields in Entity Create form to a new GUID
+
+## --- Original readme ---
 
 # Core Admin Panel for ASP.NET Core & .NET 8
 
