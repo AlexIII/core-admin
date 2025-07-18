@@ -6,6 +6,7 @@
 		<PreserveCompilationContext>false</PreserveCompilationContext>
 		<SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
 		<PackageId>AlexIII.CoreAdmin</PackageId>
+  		<StaticWebAssetBasePath>_content/CoreAdmin</StaticWebAssetBasePath>
 		<PackageVersion>3.0.1</PackageVersion>
 		<Description>Fork of DotNetEd.CoreAdmin: Automagically add an Admin Panel to your .NET 8 / .NET 9 web app.</Description>
 		<Title>Core Admin Panel for ASP.NET Core</Title>
