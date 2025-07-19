@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -46,11 +47,39 @@ namespace DotNetEd.CoreAdmin.Controllers
                         foreach (var property in navProperties)
                         {
                             // Only display One to One relationships on the Grid
-                            if(property.GetCollectionAccessor() == null)    
+                            if(property.GetCollectionAccessor() == null)
                                 query = query.Include(property.Name);
                         }
 
-                        viewModel.Data = (IEnumerable<object>)query;
+                        // Include all collection properties
+                        static Type GetIEnumerableElementType(Type type)
+                        {
+                            if (type.IsArray)
+                                return type.GetElementType();
+                            if (type.IsGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(IEnumerable<>)))
+                                return type.GetGenericArguments()[0];
+                            var iface = type.GetInterfaces()
+                                .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+                            return iface?.GetGenericArguments()[0];
+                        }
+
+                        var collectionProperties =
+                            viewModel.EntityType.GetProperties()
+                            .Where(p =>
+                                p.GetCustomAttribute<NotMappedAttribute>(true) == null &&
+                                p.PropertyType.IsAssignableTo(typeof(System.Collections.IEnumerable)) &&
+                                p.PropertyType != typeof(string) &&
+                                GetIEnumerableElementType(p.PropertyType) != null &&
+                                GetIEnumerableElementType(p.PropertyType).IsClass &&
+                                GetIEnumerableElementType(p.PropertyType) != typeof(string)
+                            );
+                            
+                        foreach (var prop in collectionProperties)
+                        {
+                            query = query.Include(prop.Name);
+                        }
+
+                        viewModel.Data = query.ToArray();
                         viewModel.DbContext = dbContextObject;
                     }
                 }
