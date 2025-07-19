@@ -5,6 +5,8 @@
 @using Microsoft.EntityFrameworkCore;
 @using System.ComponentModel.DataAnnotations;
 @using System.Reflection
+@using System.Text.Json;
+
 @inject IEnumerable<DotNetEd.CoreAdmin.CoreAdminOptions> CoreAdminOptions
 @model DotNetEd.CoreAdmin.ViewModels.DataListViewModel
 @inject IStringLocalizer<JsonLocalizer> _localizer
@@ -61,8 +63,22 @@
                         var base64 = ImageUtils.WebBase64EncodeImageByteArrayOrNull(lambda.Compile().Invoke(value));
                         return base64 == null ? string.Empty : $"<img height='48' src='{base64}'>";
                     } ).Encoded(false);
-            }   
-             /*  if (entityProperty.PropertyType == typeof(Guid))
+            }
+            else if (entityProperty.PropertyType == typeof(JsonDocument))
+            {
+                var lambda = Expression.Lambda<Func<object, JsonDocument>>(property, entity);
+                columns.Add(lambda).Titled(propertyDisplayName)
+                    .RenderedAs((value) => {
+                        var doc = lambda.Compile().Invoke(value);
+                        if (doc == null) return string.Empty;
+                        try {
+                            return $"<pre style='max-width:400px;overflow:auto'>{JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true })}</pre>";
+                        } catch {
+                            return "<span class='text-danger'>Invalid JSON</span>";
+                        }
+                    }).Encoded(false);
+            }
+            /*  if (entityProperty.PropertyType == typeof(Guid))
             {
                 var lambda = Expression.Lambda<Func<object,Guid>>(property, entity);
 
