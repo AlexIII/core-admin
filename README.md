@@ -6,7 +6,7 @@
 
 ## Fork changelog
 
-### 3.0.1
+### 3.0.2
 
 - .NET 9 support
 - Auto-initialize Key GUID fields in Entity Create form to a new GUID
