@@ -2,16 +2,20 @@
 
     bool ShouldShow(Microsoft.AspNetCore.Mvc.ModelBinding.ModelMetadata metadata)
     {
-        var shouldIgnore = ViewBag.IgnoreFromForm != null 
+        bool shouldIgnore = ViewBag.IgnoreFromForm != null
             && ((IEnumerable<string>)ViewBag.IgnoreFromForm).Contains(metadata.PropertyName);
-
-        if (metadata.ShowForDisplay && metadata.ModelType.Name == "Byte[]" && !shouldIgnore)
+        if (shouldIgnore)
         {
-            return true;
+            return false;
         }
-        
-        return metadata.ShowForDisplay
-            && !metadata.IsComplexType && !shouldIgnore;
+
+        bool hasSetter = metadata.ContainerType?.GetProperty(metadata.PropertyName)?.SetMethod != null;
+        if (!hasSetter)
+        {
+            return false;
+        }
+
+        return metadata.ShowForDisplay && (!metadata.IsComplexType || metadata.ModelType.Name == "Byte[]");
     } 
     
 }
