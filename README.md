@@ -6,10 +6,15 @@
 
 ## Fork changelog
 
-### 3.0.2
+### 3.0.3
 
-- .NET 9 support
-- Auto-initialize Key GUID fields in Entity Create form to a new GUID
+- Add .NET 9 support
+- Auto-initialize Key GUID fields in Entity Create form to a new GUID value
+- Add JsonDocument column type support
+- Add collection type support in list view
+- Add support for nullable Enums (Editor)
+- Do not display properties that do not have a setter in the Editor
+- Render checkboxes as disabled in list view
 
 ## --- Original readme ---
 
