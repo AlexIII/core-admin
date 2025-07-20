@@ -86,13 +86,22 @@
                 columns.Add(lambda).Titled(entityProperty.Name)
                     .RenderedAs((value) =>
                     {
+                        const int showFirstN = 5;
                         var finalString = "<ul>";
-                        finalString += string.Join("", ((IEnumerable)entityProperty.GetValue(value))?
-                            .Cast<object>()
+
+                        var collection = ((IEnumerable)entityProperty.GetValue(value))!.Cast<object>();
+
+                        var head = collection
                             .Select(x => x.ToString())
                             .OrderBy(x => x)
-                            .Select(x => $"<li>{x}</li>"));
+                            .Take(showFirstN);
+
+                        finalString += string.Join("", head.Select(x => $"<li>{x}</li>"));
                         finalString += "</ul>";
+
+                        var count = collection.Count();
+                        var restCount = count - head.Count();
+                        finalString += restCount > 0 ? $"<span class='text-muted'>... {restCount} more</span>" : "";
                         return finalString;
                     } ).Encoded(false);
             }
