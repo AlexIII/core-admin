@@ -1,15 +1,24 @@
 ﻿@model object
-@if (ViewData.ModelMetadata.ModelType.IsEnum)
+@{
+    var modelType = ViewData.ModelMetadata.ModelType;
+    var isNullable = Nullable.GetUnderlyingType(modelType) != null;
+    var enumType = isNullable ? Nullable.GetUnderlyingType(modelType) : modelType;
+}
+@if (enumType != null && enumType.IsEnum)
 {
-
-    var values = Enum.GetValues(ViewData.ModelMetadata.ModelType);
-    var names = Enum.GetNames(ViewData.ModelMetadata.ModelType);
+    var values = Enum.GetValues(enumType);
+    var names = Enum.GetNames(enumType);
     var items = new List<SelectListItem>();
+    if (isNullable)
+    {
+        // Add empty option for nullable enums
+        items.Add(new SelectListItem() { Text = "", Value = "", Selected = (Model == null) });
+    }
     for (var i = 0; i < values.Length; i++)
     {
-        items.Add(new SelectListItem() { Text = names[i], Value = values.GetValue(i).ToString(), Selected = (Model.ToString() == values.GetValue(i).ToString()) });
+        var valueString = values.GetValue(i).ToString();
+        var selected = Model != null && Model.ToString() == valueString;
+        items.Add(new SelectListItem() { Text = names[i], Value = valueString, Selected = selected });
     }
-    
     @Html.DropDownList("", items, new {@class = "form-control"})
-
 }
