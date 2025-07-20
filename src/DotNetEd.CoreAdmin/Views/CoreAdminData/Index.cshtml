@@ -53,7 +53,7 @@
             else if (entityProperty.PropertyType == typeof(Boolean))
             {
                 var lambda = Expression.Lambda<Func<object, Boolean>>(property, entity);
-                columns.Add(lambda).RenderedAs(m=> Html.CheckBox(entityProperty.Name, lambda.Compile().Invoke(m))).Titled(propertyDisplayName);
+                columns.Add(lambda).RenderedAs(m => Html.CheckBox(entityProperty.Name, lambda.Compile().Invoke(m), new { @disabled = "true" })).Titled(propertyDisplayName);
             }
             else if (entityProperty.PropertyType == typeof(byte[]))
             {
