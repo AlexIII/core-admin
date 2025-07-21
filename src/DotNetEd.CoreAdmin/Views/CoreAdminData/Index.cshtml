@@ -73,7 +73,7 @@
                         var doc = lambda.Compile().Invoke(value);
                         if (doc == null) return string.Empty;
                         try {
-                            return $"<pre style='max-width:400px;overflow:auto'>{JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true })}</pre>";
+                            return $"<pre class='mb-0' style='max-width:450px; max-height:4rem; overflow:auto; font-size:0.7rem; line-height:0.8rem;'>{JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true })}</pre>";
                         } catch {
                             return "<span class='text-danger'>Invalid JSON</span>";
                         }
